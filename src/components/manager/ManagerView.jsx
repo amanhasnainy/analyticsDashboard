@@ -126,10 +126,12 @@ export default function ManagerView() {
         </div>
 
         {/* Applications card with Interviews/Hired stats */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4">
+        <div className="relative rounded-xl p-6 shadow text-white 
+     bg-gradient-to-br from-[#6B7CFF] to-[#3A4DB3]
+     dark:from-[#1F2539] dark:to-[#1A2033]">
           <div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Applications</div>
-            <div className="text-4xl font-bold text-gray-900 dark:text-white mt-2">1546</div>
+            <div className="text-xl text-white dark:text-gray-400">Applications</div>
+            <div className="text-4xl font-bold text-gray-800 dark:text-white mt-2">1546</div>
           </div>
 
           <div className="mt-4 space-y-2">

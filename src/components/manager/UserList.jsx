@@ -1,13 +1,27 @@
+// src/components/manager/UserList.jsx
 import React from "react";
+import Skeleton from "../ui/Skeleton";
 import { useSelector } from "react-redux";
 
 export default function UserList({ users }) {
   const members = useSelector((s) => s.members.list);
+  const loading = useSelector((s) => s.members.loading);
 
-  // use Redux state if no users passed
   const list = users?.length ? users : members;
 
-  if (!list.length) return <p className="text-gray-500">No employees found.</p>;
+  if (loading) {
+    return (
+      <div className="space-y-3">
+        <Skeleton className="h-14 w-full rounded-xl" />
+        <Skeleton className="h-14 w-full rounded-xl" />
+        <Skeleton className="h-14 w-full rounded-xl" />
+      </div>
+    );
+  }
+
+  if (!list.length) {
+    return <p className="text-gray-500">No employees found.</p>;
+  }
 
   return (
     <div className="space-y-3">
@@ -16,15 +30,12 @@ export default function UserList({ users }) {
           key={u.id}
           className="flex items-center justify-between p-3 border rounded-xl bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
         >
-          {/* LEFT: Avatar + Name */}
+          {/* LEFT: Avatar + Info */}
           <div className="flex items-center gap-3">
             <img
               src={u.image}
               alt={u.firstName}
               className="w-12 h-12 rounded-full object-cover shadow"
-              onError={(e) => {
-                e.target.src = `https://i.pravatar.cc/150?u=${u.id}`;
-              }}
             />
 
             <div>
@@ -38,10 +49,9 @@ export default function UserList({ users }) {
             </div>
           </div>
 
-          {/* RIGHT: Status */}
+          {/* STATUS BADGE */}
           <span
-            className={`
-              px-3 py-1 text-xs rounded-full font-medium
+            className={`px-3 py-1 text-xs rounded-full font-medium
               ${
                 u.status === "Working"
                   ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"

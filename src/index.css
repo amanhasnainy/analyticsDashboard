@@ -31,3 +31,10 @@ body {
 .switch-pill {
   @apply flex bg-gray-200 dark:bg-gray-800 p-1 rounded-full w-32 justify-between items-center;
 }
+input {
+  color: black !important;
+}
+select, select option {
+  color: black !important;
+}
+

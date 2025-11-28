@@ -28,24 +28,28 @@ export default function TaskForm() {
       completed: false,
     };
 
-    dispatch(assignTask({ memberId, task }));
+    dispatch(assignTask({ memberId: Number(memberId), task }));
 
     setTitle("");
     setDueDate("");
   };
 
   return (
-    <form onSubmit={submit} className="space-y-2">
+    <form onSubmit={submit} className="space-y-3">
+
+      {/* MEMBER SELECTION */}
       <select
-        value={memberId}
-        onChange={(e) => setMemberId(e.target.value)}
-        cclassName="
-        w-full p-2 border rounded
-        text-black
-        placeholder-gray-500
-        bg-white dark:bg-gray-100
-      "
-      >
+  value={memberId}
+  onChange={(e) => setMemberId(Number(e.target.value))}
+  className="
+    w-full p-2 border rounded
+    text-black dark:text-black
+    bg-white dark:bg-gray-600
+    !text-black
+    [&>*]:!text-black
+    [&>*]:bg-white
+  "
+>
         {members.map((m) => (
           <option key={m.id} value={m.id}>
             {m.firstName} {m.lastName}
@@ -53,29 +57,33 @@ export default function TaskForm() {
         ))}
       </select>
 
+      {/* TASK TITLE */}
       <input
         type="text"
         placeholder="Task title"
         className="
-    w-full p-2 border rounded
-    text-gray-900 dark:text-white
-    placeholder-gray-400 dark:placeholder-gray-500
-    bg-white dark:bg-gray-700
-  "
+          w-full p-2 border rounded
+          text-black dark:text-black
+          placeholder-gray-500
+          bg-white dark:bg-gray-600
+        "
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
 
+      {/* DUE DATE */}
       <input
         type="date"
-        className="w-full p-2 border rounded
-text-gray-900 dark:text-black
-placeholder-gray-400 dark:placeholder-gray-500
-bg-white dark:bg-gray-700"
+        className="
+          w-full p-2 border rounded
+          text-black dark:text-black
+          bg-white dark:bg-gray-600
+        "
         value={dueDate}
         onChange={(e) => setDueDate(e.target.value)}
       />
 
+      {/* SUBMIT BUTTON */}
       <button
         type="submit"
         className="w-full py-2 bg-primary text-white rounded"

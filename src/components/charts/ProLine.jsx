@@ -1,7 +1,8 @@
+// src/components/charts/ProLine.jsx
 import React from "react";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   Tooltip,
@@ -10,45 +11,67 @@ import {
 } from "recharts";
 
 const data = [
-  { name: "Mon", value: 40 },
-  { name: "Tue", value: 55 },
-  { name: "Wed", value: 50 },
-  { name: "Thu", value: 70 },
-  { name: "Fri", value: 60 },
-  { name: "Sat", value: 80 },
-  { name: "Sun", value: 75 },
+  { name: "15 Dec", value: 0 },
+  { name: "25 Dec", value: 20 },
+  { name: "4 Jan", value: 40 },
+  { name: "14 Jan", value: 5 },
+  { name: "24 Jan", value: 60 },
+  { name: "3 Feb", value: 70 },
+  { name: "13 Feb", value: 70 },
+  { name: "23 Feb", value: 50 },
+  { name: "2 Mar", value: 70 },
+  { name: "12 Mar", value: 100 },
 ];
 
 export default function ProLine() {
   return (
-    <div className="w-full h-[300px] rounded-xl bg-white dark:bg-gray-900 p-4 shadow">
+    <div className="w-full h-[320px] rounded-xl bg-white dark:bg-gray-900 p-4 shadow">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
+        <AreaChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
           
-          {/* Gradient FIX — THIS IS THE RIGHT WAY */}
+          {/* Gradient fill for the area under the line */}
           <defs>
-            <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#6366F1" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
+            <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ff7eb3" stopOpacity={0.4} />
+              <stop offset="50%" stopColor="#ffb68b" stopOpacity={0.3} />
+              <stop offset="100%" stopColor="#ffe9cc" stopOpacity={0.3} />
             </linearGradient>
           </defs>
 
-          <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
 
-          {/* PROFESSIONAL STOCK-LIKE LINE */}
-          <Line
+          <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#374151" }} />
+          <YAxis tick={{ fontSize: 12, fill: "#374151" }} />
+
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "white",
+              borderRadius: "10px",
+              border: "1px solid #e5e7eb",
+            }}
+          />
+
+          {/* The line + dots */}
+          <Area
             type="monotone"
             dataKey="value"
-            stroke="#6366F1"
+            stroke="#ff375f"
             strokeWidth={3}
-            dot={false}
-            activeDot={{ r: 6 }}
-            fill="url(#lineGradient)"
+            fill="url(#chartFill)"
+            activeDot={{
+              r: 6,
+              fill: "#ffffff",
+              stroke: "#ff375f",
+              strokeWidth: 3,
+            }}
+            dot={{
+              r: 4,
+              fill: "#ffffff",
+              stroke: "#ff375f",
+              strokeWidth: 2,
+            }}
           />
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );

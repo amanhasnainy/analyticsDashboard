@@ -2,36 +2,50 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setRole } from "../redux/slices/roleSlice";
+import { motion } from "framer-motion";
+import {
+  UserGroupIcon,
+  UserIcon
+} from "@heroicons/react/24/outline";
 
 export default function RoleSwitch() {
   const dispatch = useDispatch();
   const current = useSelector((s) => s.role.currentRole);
 
-  return (
-    <div className="switch-pill">
-      {/* MANAGER / LEAD */}
-      <button
-        onClick={() => dispatch(setRole("lead"))}
-        className={`px-3 py-1 rounded-full text-xs font-medium transition ${
-          current === "lead"
-            ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow"
-            : "text-gray-600 dark:text-gray-300"
-        }`}
-      >
-        Lead
-      </button>
+  const roles = [
+    { id: "lead", label: "Lead", icon: <UserGroupIcon className="w-4 h-4" /> },
+    { id: "member", label: "Member", icon: <UserIcon className="w-4 h-4" /> },
+  ];
 
-      {/* EMPLOYEE */}
-      <button
-        onClick={() => dispatch(setRole("member"))}
-        className={`px-3 py-1 rounded-full text-xs font-medium transition ${
-          current === "member"
-            ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow"
-            : "text-gray-600 dark:text-gray-300"
-        }`}
-      >
-        Member
-      </button>
+  return (
+    <div className="relative flex bg-gray-200 dark:bg-gray-800 rounded-full p-1 w-[180px] h-9 items-center select-none">
+
+      {/* Sliding Highlight */}
+      <motion.div
+        layout
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="absolute top-1 bottom-1 w-[85px] rounded-full bg-white dark:bg-gray-700 shadow"
+        style={{
+          left: current === "lead" ? "4px" : "90px",
+        }}
+      />
+
+      {/* Buttons */}
+      {roles.map((r) => (
+        <button
+          key={r.id}
+          onClick={() => dispatch(setRole(r.id))}
+          className={`z-10 flex-1 flex items-center justify-center gap-1 font-medium 
+            text-xs transition ${
+              current === r.id
+                ? "text-black dark:text-white"
+                : "text-gray-600 dark:text-gray-300"
+            }`}
+        >
+          {r.icon}
+          {r.label}
+        </button>
+      ))}
     </div>
   );
 }
