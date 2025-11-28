@@ -1,101 +1,64 @@
 // src/components/Navbar.jsx
-import { Search, Moon, Sun, ChevronDown } from "lucide-react";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../redux/slices/themeSlice";
-import { setRole } from "../redux/slices/roleSlice";
+import React from "react";
+import { MagnifyingGlassIcon, BellIcon } from "@heroicons/react/24/outline";
+import RoleSwitch from "./RoleSwitch";
+import DarkModeToggle from "./DarkModeToggle";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
-  const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
-
-  // Redux states
-  const theme = useSelector((s) => (s.theme.darkMode ? "dark" : "light"));
-  const role = useSelector((s) => s.role.currentRole);
-
-  // Theme Toggle
-  const handleThemeToggle = () => {
-    dispatch(toggleTheme());
-    document.documentElement.classList.toggle("dark");
-  };
-
-  // Role Change
-  const handleRoleChange = (newRole) => {
-    dispatch(setRole(newRole));
-    setOpen(false);
-  };
+  const user = useSelector((s) => s.role.currentUser);
 
   return (
-    <div className="w-full bg-white dark:bg-gray-900 shadow-md h-20 flex items-center px-8 justify-between">
-
-      {/* Search Bar */}
-      <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-xl w-96">
-        <Search size={18} className="text-gray-500 dark:text-gray-300" />
-        <input
-          type="text"
-          placeholder="Search…"
-          className="bg-transparent w-full outline-none text-gray-700 dark:text-gray-300"
-        />
-      </div>
-
-      {/* Right Section */}
-      <div className="flex items-center gap-6">
-
-        {/* Role Switch Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setOpen(!open)}
-            className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-xl text-gray-700 dark:text-gray-200 text-sm"
-          >
-            Role: <span className="font-medium">{role}</span>
-            <ChevronDown size={16} />
-          </button>
-
-          {open && (
-            <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-900 shadow-xl border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-              <button
-                onClick={() => handleRoleChange("Admin")}
-                className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
-              >
-                Admin
-              </button>
-              <button
-                onClick={() => handleRoleChange("Manager")}
-                className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
-              >
-                Manager
-              </button>
-              <button
-                onClick={() => handleRoleChange("User")}
-                className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
-              >
-                User
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Theme Toggle */}
-        <button
-          onClick={handleThemeToggle}
-          className="p-2 bg-gray-100 dark:bg-gray-800 rounded-xl text-gray-700 dark:text-gray-200"
-        >
-          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-        </button>
-
-        {/* User Profile */}
-        <div className="flex items-center gap-4">
-          <img
-            src="https://i.pravatar.cc/40"
-            alt="profile"
-            className="rounded-full"
-          />
-          <div className="text-gray-700 dark:text-gray-300">
-            <p className="font-medium">Dylan Hunter</p>
-            <p className="text-sm">{role} Profile</p>
+    <header className="w-full bg-white dark:bg-[#0f172a] shadow-sm h-20 px-6 flex items-center justify-between">
+      
+      {/* Left: Search */}
+      <div className="hidden md:block">
+        <div className="w-72">
+          <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-lg shadow-sm transition">
+            <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 dark:text-gray-300" />
+            <input
+              type="text"
+              placeholder="Search…"
+              className="bg-transparent w-full outline-none text-gray-700 dark:text-gray-200"
+            />
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Right */}
+      <div className="flex items-center gap-6">
+        
+        {/* Avatars Group */}
+        <div className="hidden md:flex -space-x-2">
+          <img src="https://i.pravatar.cc/40?img=11" className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-700" />
+          <img src="https://i.pravatar.cc/40?img=12" className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-700" />
+          <img src="https://i.pravatar.cc/40?img=13" className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-700" />
+        </div>
+
+        {/* Notifications */}
+        <button className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 shadow-sm">
+          <BellIcon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+        </button>
+
+        {/* Role Switch */}
+        <RoleSwitch />
+
+        {/* Dark Mode Toggle */}
+        <DarkModeToggle />
+
+        {/* User Profile */}
+        <div className="flex items-center gap-3">
+          <div className="text-sm text-right leading-4">
+            <div className="font-medium text-gray-800 dark:text-gray-100">{user}</div>
+            <div className="text-xs text-gray-500">Team Lead</div>
+          </div>
+          <img
+            src={`https://i.pravatar.cc/40?u=${user}`}
+            className="w-10 h-10 rounded-full shadow-sm"
+          />
+        </div>
+
+      </div>
+    </header>
   );
 }

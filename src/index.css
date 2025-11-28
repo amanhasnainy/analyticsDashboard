@@ -2,7 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Make transitions smooth */
-* {
-  transition: background-color 0.3s ease, color 0.3s ease;
+body {
+  @apply bg-softbg text-textdark transition-colors duration-300;
+}
+
+.dark body {
+  @apply bg-gray-900 text-gray-200;
+}
+
+/* Smooth card hover */
+.card {
+  @apply bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-gray-700;
+}
+
+.card:hover {
+  @apply shadow-lg -translate-y-1;
+}
+
+/* Sidebar link style */
+.sidebar-link {
+  @apply flex items-center gap-3 text-white/80 hover:text-white px-4 py-2 rounded-md transition;
+}
+.sidebar-link-active {
+  @apply text-white bg-white/10;
+}
+
+/* Pills for role switch */
+.switch-pill {
+  @apply flex bg-gray-200 dark:bg-gray-800 p-1 rounded-full w-32 justify-between items-center;
 }

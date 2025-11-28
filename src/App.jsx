@@ -1,22 +1,15 @@
-// src/App.jsx
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setDarkMode } from "./redux/slices/themeSlice";
 import Dashboard from "./pages/Dashboard";
 
 export default function App() {
-  const theme = useSelector((s) => s.theme.darkMode); // TRUE / FALSE
+  const dispatch = useDispatch();
+  const darkMode = useSelector((s) => s.theme.darkMode);
 
   useEffect(() => {
-    if (theme) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
 
-  return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition">
-      <Dashboard />
-    </div>
-  );
+  return <Dashboard />;
 }

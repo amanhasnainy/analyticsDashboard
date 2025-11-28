@@ -1,89 +1,81 @@
+// src/components/Sidebar.jsx
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../redux/slices/themeSlice";
 import {
-  LayoutDashboard,
-  FolderKanban,
-  Ticket,
-  Users,
-  Briefcase,
-  WalletCards,
-  AppWindow,
-  Layers,
-  Settings,
-} from "lucide-react";
+  HomeIcon,
+  BriefcaseIcon,
+  TicketIcon,
+  UsersIcon,
+  BuildingOfficeIcon,
+  CurrencyDollarIcon,
+  Cog6ToothIcon,
+  Squares2X2Icon,
+} from "@heroicons/react/24/outline";
+
+const MENU = [
+  { title: "Dashboard", icon: HomeIcon },
+  { title: "Projects", icon: BriefcaseIcon },
+  { title: "Tickets", icon: TicketIcon },
+  { title: "Our Clients", icon: UsersIcon },
+  { title: "Employees", icon: UsersIcon },
+  { title: "Accounts", icon: BuildingOfficeIcon },
+  { title: "Payroll", icon: CurrencyDollarIcon },
+  { title: "App", icon: Squares2X2Icon },
+  { title: "Settings", icon: Cog6ToothIcon },
+];
 
 export default function Sidebar() {
-  const dispatch = useDispatch();
-  const darkMode = useSelector((state) => state.theme.darkMode);
-
-  const menuItems = [
-    { title: "Dashboard", icon: <LayoutDashboard size={18} /> },
-    { title: "Projects", icon: <FolderKanban size={18} /> },
-    { title: "Tickets", icon: <Ticket size={18} /> },
-    { title: "Our Clients", icon: <Users size={18} /> },
-    { title: "Employees", icon: <Briefcase size={18} /> },
-    { title: "Accounts", icon: <WalletCards size={18} /> },
-    { title: "Payroll", icon: <WalletCards size={18} /> },
-    { title: "App", icon: <AppWindow size={18} /> },
-    { title: "Other Pages", icon: <Layers size={18} /> },
-    { title: "UI Components", icon: <Settings size={18} /> },
-  ];
-
   return (
     <aside
       className="
-        w-64 bg-[#0f172a] dark:bg-[#111827] text-white 
-        min-h-screen py-8 px-6 flex flex-col gap-8 shadow-xl
+        w-72 
+        bg-[#1E293B]          /* ALWAYS DARK */
+        text-white 
+        min-h-screen 
+        py-8 
+        px-6 
+        flex 
+        flex-col 
+        gap-6
       "
     >
       {/* Logo */}
       <div className="text-2xl font-bold flex items-center gap-3">
         <div className="bg-white/20 p-2 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6l4 2" />
-          </svg>
+          <Squares2X2Icon className="w-6 h-6 text-white" />
         </div>
         My-Task
       </div>
 
       {/* Navigation */}
-      <nav className="flex flex-col gap-1">
-        {menuItems.map((item, i) => (
+      <nav className="flex flex-col gap-2 mt-4">
+        {MENU.map((item, index) => (
           <button
-            key={i}
+            key={index}
             className="
-              flex items-center gap-3 py-2.5 px-3 rounded-lg
-              hover:bg-white/10 transition-all group
+              flex items-center gap-3 
+              py-2.5 px-3 rounded-lg
+              hover:bg-[#334155]
+              transition
             "
           >
-            <span className="text-white opacity-70 group-hover:opacity-100 transition">
-              {item.icon}
-            </span>
-            <span className="text-sm font-medium opacity-90 group-hover:opacity-100">
-              {item.title}
-            </span>
+            <item.icon className="w-5 h-5 text-gray-200" />
+            <span className="text-gray-100">{item.title}</span>
           </button>
         ))}
       </nav>
 
       {/* Divider */}
-      <div className="h-[1px] bg-white/20"></div>
+      <div className="h-px bg-white/20 my-4"></div>
 
-      {/* Settings */}
-      <div className="flex flex-col gap-4 text-sm">
-        
-
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input type="checkbox" className="w-4 h-4" />
-          Enable RTL Mode
-        </label>
+      {/* Shortcuts */}
+      <div className="flex flex-col gap-3 text-sm">
+        <div className="text-gray-300">Shortcuts</div>
+        <button className="px-3 py-2 bg-white/10 rounded hover:bg-white/20">
+          + New Task
+        </button>
+        <button className="px-3 py-2 bg-white/10 rounded hover:bg-white/20">
+          Reports
+        </button>
       </div>
     </aside>
   );

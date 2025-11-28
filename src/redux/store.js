@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import membersReducer from "./slices/membersSlice";
 import roleReducer from "./slices/roleSlice";
 import themeReducer from "./slices/themeSlice";
+import membersReducer from "./slices/membersSlice";
 
 export const store = configureStore({
   reducer: {
-    members: membersReducer,
     role: roleReducer,
-    theme: themeReducer,   // ✅ IMPORTANT
+    theme: themeReducer,
+    members: membersReducer,
   },
 });

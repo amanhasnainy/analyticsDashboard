@@ -1,106 +1,57 @@
-// src/redux/slices/membersSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Optional: fetch fake users from randomuser.me
-export const fetchMembers = createAsyncThunk('members/fetchMembers', async () => {
-  const res = await fetch('https://randomuser.me/api/?results=4&nat=us'); // or simulate
-  const data = await res.json();
-  // map to our minimal member shape
-  return data.results.map((u, idx) => ({
-    id: u.login.uuid,
-    name: `${u.name.first} ${u.name.last}`,
-    avatar: u.picture.thumbnail,
-    status: 'Offline', // Working, Break, Meeting, Offline
-    tasks: [
-      // sample task structure
-      // { id: 't1', title: 'Design API', dueDate: '2025-12-01', progress: 20, completed: false }
-    ]
-  }));
-});
+export const fetchMembers = createAsyncThunk(
+  "members/fetchMembers",
+  async () => {
+    const res = await fetch("https://dummyjson.com/users?limit=10");
+    const data = await res.json();
+    return data.users.map((u) => ({
+      ...u,
+      tasks: [],
+      status: ["Working", "Break", "Meeting", "Offline"][
+        Math.floor(Math.random() * 4)
+      ],
+    }));
+  }
+);
 
 const membersSlice = createSlice({
-  name: 'members',
-  initialState: {
-    list: [], // array of members
-    status: 'idle',
-    error: null
-  },
+  name: "members",
+  initialState: { list: [], loading: false },
   reducers: {
-    setStatus: (state, action) => {
-      const { memberId, status } = action.payload;
-      const m = state.list.find(x => x.id === memberId);
-      if (m) m.status = status;
-    },
-    assignTask: (state, action) => {
+    assignTask(state, action) {
       const { memberId, task } = action.payload;
-      const m = state.list.find(x => x.id === memberId);
-      if (m) {
-        m.tasks = m.tasks || [];
-        m.tasks.push(task);
-      }
+      const user = state.list.find((m) => m.id == memberId);
+      if (user) user.tasks.push(task);
     },
-    updateTaskProgress: (state, action) => {
+    updateTaskProgress(state, action) {
       const { memberId, taskId, delta } = action.payload;
-      const m = state.list.find(x => x.id === memberId);
-      if (!m) return;
-      const t = m.tasks.find(t => t.id === taskId);
-      if (!t) return;
-      t.progress = Math.min(100, Math.max(0, t.progress + delta));
-      if (t.progress === 100) t.completed = true;
-      else t.completed = false;
+      const user = state.list.find((m) => m.id == memberId);
+      if (!user) return;
+      const task = user.tasks.find((t) => t.id === taskId);
+      if (!task) return;
+
+      task.progress = Math.max(0, Math.min(100, task.progress + delta));
+      task.completed = task.progress === 100;
     },
-    completeTask: (state, action) => {
-      const { memberId, taskId } = action.payload;
-      const m = state.list.find(x => x.id === memberId);
-      if (!m) return;
-      const t = m.tasks.find(t => t.id === taskId);
-      if (t) {
-        t.progress = 100;
-        t.completed = true;
-      }
+    setStatus(state, action) {
+      const { memberId, status } = action.payload;
+      const user = state.list.find((m) => m.id == memberId);
+      if (user) user.status = status;
     },
-    addMember: (state, action) => {
-      state.list.push(action.payload);
-    },
-    removeMember: (state, action) => {
-      state.list = state.list.filter(m => m.id !== action.payload);
-    }
   },
-  extraReducers(builder) {
+  extraReducers: (builder) => {
     builder
-      .addCase(fetchMembers.pending, (state) => {
-        state.status = 'loading';
+      .addCase(fetchMembers.pending, (s) => {
+        s.loading = true;
       })
-      .addCase(fetchMembers.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        // attach default tasks to show functionality
-        state.list = action.payload.map((m, idx) => ({
-          ...m,
-          tasks: [
-            {
-              id: `${m.id}-t1`,
-              title: idx === 0 ? 'Onboard docs' : 'Implement feature',
-              dueDate: new Date(Date.now() + (idx + 3) * 24 * 60 * 60 * 1000).toISOString().slice(0,10),
-              progress: idx * 10,
-              completed: false
-            }
-          ]
-        }));
-      })
-      .addCase(fetchMembers.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
+      .addCase(fetchMembers.fulfilled, (s, action) => {
+        s.loading = false;
+        s.list = action.payload;
       });
-  }
+  },
 });
 
-export const {
-  setStatus,
-  assignTask,
-  updateTaskProgress,
-  completeTask,
-  addMember,
-  removeMember
-} = membersSlice.actions;
-
+export const { assignTask, updateTaskProgress, setStatus } =
+  membersSlice.actions;
 export default membersSlice.reducer;
